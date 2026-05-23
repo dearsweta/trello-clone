@@ -1,6 +1,6 @@
 # Trello Clone
 
-Trello-style Kanban app at `/Users/swetajaiswal/trello-clone`.
+Trello-style Kanban app at
 
 ## Setup
 
