@@ -32,6 +32,20 @@ export function mapCard(row) {
   };
 }
 
+export function mapInboxCard(row, member = null) {
+  return {
+    id: row.id,
+    title: row.title,
+    description: row.description,
+    createdBy: row.created_by,
+    archived: Boolean(row.archived),
+    createdAt: row.created_at,
+    createdByMember: member
+      ? { id: member.id, name: member.name, avatarColor: member.avatar_color }
+      : null,
+  };
+}
+
 export function mapMember(row) {
   return {
     id: row.id,

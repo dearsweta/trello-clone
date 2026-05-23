@@ -124,10 +124,6 @@ export async function createBoard({ title }) {
       [title, '#7C3AED']
     );
     const boardId = result.insertId;
-    await conn.query(
-      'INSERT INTO lists (board_id, title, type, position) VALUES (?, ?, ?, ?)',
-      [boardId, 'Inbox', 'inbox', 500]
-    );
     await conn.commit();
     return getBoardById(boardId);
   } catch (err) {
@@ -157,8 +153,8 @@ export async function updateBoard(boardId, data) {
 
 export async function getMaxListPosition(boardId) {
   const [rows] = await pool.query(
-    'SELECT MAX(position) as maxPos FROM lists WHERE board_id = ? AND type = ?',
-    [boardId, 'board']
+    'SELECT MAX(position) as maxPos FROM lists WHERE board_id = ?',
+    [boardId]
   );
   return rows[0]?.maxPos ?? 0;
 }

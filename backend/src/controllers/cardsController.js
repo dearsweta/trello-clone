@@ -2,6 +2,7 @@ import * as cardsService from '../services/cardsService.js';
 import * as boardsService from '../services/boardsService.js';
 import * as membersService from '../services/membersService.js';
 import * as labelsService from '../services/labelsService.js';
+import * as inboxService from '../services/inboxService.js';
 import pool from '../db/pool.js';
 
 async function getBoardIdForCard(cardId) {
@@ -19,11 +20,20 @@ async function getBoardIdForList(listId) {
 
 export async function createCard(req, res, next) {
   try {
+    if (req.body.fromInboxId) {
+      const result = await inboxService.transferInboxCardToBoard(
+        req.body.fromInboxId,
+        req.body.listId,
+        req.body.newPosition
+      );
+      return res.status(201).json(result);
+    }
     const card = await cardsService.createCard(req.body);
     const boardId = await getBoardIdForList(req.body.listId);
     const board = boardId ? await boardsService.getBoardById(boardId) : null;
     res.status(201).json({ card, board });
   } catch (err) {
+    if (err.status) return res.status(err.status).json({ error: err.message });
     next(err);
   }
 }

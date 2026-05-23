@@ -3,6 +3,9 @@ import { api } from './client.js';
 export const createCard = (listId, title) =>
   api.post('/cards', { listId, title }).then((r) => r.data);
 
+export const createCardFromInbox = (fromInboxId, listId, newPosition) =>
+  api.post('/cards', { fromInboxId, listId, newPosition }).then((r) => r.data);
+
 export const updateCard = (id, data) => api.patch(`/cards/${id}`, data).then((r) => r.data);
 
 export const deleteCard = (id) => api.delete(`/cards/${id}`).then((r) => r.data);

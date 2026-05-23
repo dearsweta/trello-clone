@@ -13,25 +13,15 @@ export async function createList({ boardId, title }) {
 }
 
 export async function updateList(listId, { title }) {
-  const [rows] = await pool.query('SELECT type FROM lists WHERE id = ?', [listId]);
+  const [rows] = await pool.query('SELECT id FROM lists WHERE id = ?', [listId]);
   if (!rows.length) return null;
-  if (rows[0].type === 'inbox') {
-    const err = new Error('Cannot rename inbox list');
-    err.status = 400;
-    throw err;
-  }
   await pool.query('UPDATE lists SET title = ? WHERE id = ?', [title, listId]);
   return { id: listId, title };
 }
 
 export async function deleteList(listId) {
-  const [rows] = await pool.query('SELECT type, board_id FROM lists WHERE id = ?', [listId]);
+  const [rows] = await pool.query('SELECT board_id FROM lists WHERE id = ?', [listId]);
   if (!rows.length) return false;
-  if (rows[0].type === 'inbox') {
-    const err = new Error('Cannot delete inbox list');
-    err.status = 400;
-    throw err;
-  }
   await pool.query('DELETE FROM lists WHERE id = ?', [listId]);
   return rows[0].board_id;
 }

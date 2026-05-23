@@ -1,22 +1,59 @@
-import { FiLayout } from 'react-icons/fi';
+import { FiLayers, FiPlus } from 'react-icons/fi';
 import BoardsList from './BoardsList.jsx';
-import Inbox from './Inbox.jsx';
+import SidebarInboxDrop from './SidebarInboxDrop.jsx';
 
-export default function Sidebar({ boards, activeBoardId, inboxActive, onSelectBoard, onSelectInbox, onCreateBoard }) {
+export default function Sidebar({
+  boards,
+  activeBoardId,
+  inboxActive,
+  inboxCardCount = 0,
+  inboxDropActive = false,
+  onSelectBoard,
+  onSelectInbox,
+  onCreateBoard,
+}) {
   return (
-    <aside className="flex w-56 shrink-0 flex-col bg-slate-900 text-white md:w-64">
-      <div className="flex items-center gap-2 border-b border-white/10 px-4 py-4">
-        <FiLayout className="text-violet-400" size={22} />
-        <span className="text-lg font-bold tracking-tight">Kanban</span>
+    <aside
+      className={`flex shrink-0 flex-col border-r border-slate-800 bg-[#1e1f26] text-white transition-[width] ${
+        inboxActive ? 'w-[280px]' : 'w-[240px]'
+      }`}
+    >
+      <div className="shrink-0 border-b border-white/10 px-3 py-3">
+        <div className="mb-3 flex items-center gap-2 px-1">
+          <FiLayers className="text-violet-400" size={20} />
+          <span className="text-base font-semibold tracking-tight text-white">TaskFlow</span>
+        </div>
+        <button
+          type="button"
+          onClick={onCreateBoard}
+          className="flex w-full items-center justify-center gap-2 rounded-md bg-violet-600/90 px-3 py-2 text-sm font-medium text-white transition hover:bg-violet-600"
+        >
+          <FiPlus size={15} />
+          Create Board
+        </button>
       </div>
-      <div className="flex flex-1 flex-col gap-2 overflow-y-auto py-3">
-        <Inbox active={inboxActive} onSelect={onSelectInbox} />
-        <BoardsList
-          boards={boards}
-          activeBoardId={inboxActive ? null : activeBoardId}
-          onSelect={onSelectBoard}
-          onCreate={onCreateBoard}
-        />
+
+      <div className="flex min-h-0 flex-1 flex-col">
+        <div
+          className={`flex min-h-0 flex-col border-b border-white/10 ${
+            inboxActive ? 'flex-[1.4]' : 'shrink-0'
+          }`}
+        >
+          <SidebarInboxDrop
+            active={inboxActive}
+            cardCount={inboxCardCount}
+            dropActive={inboxDropActive}
+            onSelect={onSelectInbox}
+          />
+        </div>
+
+        <div className="flex min-h-0 flex-[0.85] flex-col overflow-hidden px-1 py-2">
+          <BoardsList
+            boards={boards}
+            activeBoardId={inboxActive ? null : activeBoardId}
+            onSelect={onSelectBoard}
+          />
+        </div>
       </div>
     </aside>
   );

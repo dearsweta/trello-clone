@@ -11,6 +11,12 @@ mysql -u root -p < db/schema.sql
 mysql -u root -p < db/seed.sql
 ```
 
+If upgrading an existing database that still has per-board Inbox lists:
+
+```bash
+mysql -u root -p trello_clone < db/migrate_global_inbox.sql
+```
+
 ### 2. Backend
 
 ```bash

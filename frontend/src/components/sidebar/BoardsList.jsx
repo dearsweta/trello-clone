@@ -1,40 +1,49 @@
-import { FiPlus } from 'react-icons/fi';
+import { memo } from 'react';
 
-export default function BoardsList({ boards, activeBoardId, onSelect, onCreate }) {
+function BoardNavItem({ board, active, onSelect }) {
   return (
-    <div className="flex flex-col gap-1">
-      <div className="flex items-center justify-between px-3 py-2">
-        <span className="text-xs font-semibold uppercase tracking-wide text-slate-400">Boards</span>
-        <button
-          type="button"
-          onClick={onCreate}
-          className="rounded p-1 text-slate-400 transition hover:bg-white/10 hover:text-white"
-          aria-label="Create board"
-        >
-          <FiPlus size={16} />
-        </button>
-      </div>
-      <ul className="flex flex-col gap-0.5 px-2">
+    <li>
+      <button
+        type="button"
+        onClick={() => onSelect(board.id)}
+        className={`group flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left transition ${
+          active
+            ? 'bg-white/10 text-white'
+            : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'
+        }`}
+      >
+        <span
+          className={`h-1.5 w-1.5 shrink-0 rounded-full ${active ? 'ring-2 ring-white/30' : ''}`}
+          style={{ backgroundColor: board.background }}
+        />
+        <span className={`truncate text-[13px] leading-tight ${active ? 'font-medium' : 'font-normal'}`}>
+          {board.title}
+        </span>
+      </button>
+    </li>
+  );
+}
+
+const MemoBoardNavItem = memo(BoardNavItem);
+
+function BoardsList({ boards, activeBoardId, onSelect }) {
+  return (
+    <div className="flex min-h-0 flex-1 flex-col">
+      <p className="mb-1.5 px-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+        Boards
+      </p>
+      <ul className="flex flex-1 flex-col gap-0.5 overflow-y-auto pr-1">
         {boards.map((b) => (
-          <li key={b.id}>
-            <button
-              type="button"
-              onClick={() => onSelect(b.id)}
-              className={`w-full rounded-lg px-3 py-2 text-left text-sm font-medium transition ${
-                activeBoardId === b.id
-                  ? 'bg-white/20 text-white'
-                  : 'text-slate-300 hover:bg-white/10 hover:text-white'
-              }`}
-            >
-              <span
-                className="mr-2 inline-block h-2 w-2 rounded-full"
-                style={{ backgroundColor: b.background }}
-              />
-              {b.title}
-            </button>
-          </li>
+          <MemoBoardNavItem
+            key={b.id}
+            board={b}
+            active={activeBoardId === b.id}
+            onSelect={onSelect}
+          />
         ))}
       </ul>
     </div>
   );
 }
+
+export default memo(BoardsList);

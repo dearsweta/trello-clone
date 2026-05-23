@@ -6,6 +6,7 @@ import cardsRouter from './routes/cards.js';
 import membersRouter from './routes/members.js';
 import labelsRouter from './routes/labels.js';
 import checklistRouter from './routes/checklist.js';
+import inboxRouter from './routes/inbox.js';
 
 const app = express();
 
@@ -19,6 +20,7 @@ app.use('/lists', listsRouter);
 app.use('/cards', cardsRouter);
 app.use('/members', membersRouter);
 app.use('/labels', labelsRouter);
+app.use('/inbox', inboxRouter);
 app.use('/', checklistRouter);
 
 app.use((err, _req, res, _next) => {

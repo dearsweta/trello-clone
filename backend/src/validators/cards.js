@@ -2,7 +2,11 @@ import { z } from 'zod';
 
 export const createCardSchema = z.object({
   listId: z.coerce.number().int().positive(),
-  title: z.string().min(1).max(255),
+  title: z.string().min(1).max(255).optional(),
+  fromInboxId: z.coerce.number().int().positive().optional(),
+  newPosition: z.coerce.number().int().positive().optional(),
+}).refine((data) => data.fromInboxId || data.title, {
+  message: 'title is required when fromInboxId is not provided',
 });
 
 export const updateCardSchema = z.object({
