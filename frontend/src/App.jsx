@@ -9,7 +9,6 @@ export default function App() {
   const [boards, setBoards] = useState([]);
   const [board, setBoard] = useState(null);
   const [inboxCards, setInboxCards] = useState([]);
-  const [viewMode, setViewMode] = useState('board');
   const [activeBoardCardId, setActiveBoardCardId] = useState(null);
   const [activeInboxCardId, setActiveInboxCardId] = useState(null);
   const [search, setSearch] = useState('');
@@ -80,7 +79,6 @@ export default function App() {
   };
 
   const handleSelectBoard = async (id) => {
-    setViewMode('board');
     setActiveBoardCardId(null);
     setActiveInboxCardId(null);
     try {
@@ -90,19 +88,11 @@ export default function App() {
     }
   };
 
-  const handleSelectInbox = () => {
-    setViewMode('inbox');
-    setActiveBoardCardId(null);
-    setActiveInboxCardId(null);
-  };
-
   return (
     <WorkspaceLayout
       boards={boards}
       board={board}
       inboxCards={inboxCards}
-      viewMode={viewMode}
-      inboxActive={viewMode === 'inbox'}
       search={search}
       filters={filters}
       activeBoardCard={activeBoardCard}
@@ -110,14 +100,12 @@ export default function App() {
       loading={loading}
       error={error}
       onSelectBoard={handleSelectBoard}
-      onSelectInbox={handleSelectInbox}
       onCreateBoard={async () => {
         const title = window.prompt('Board title');
         if (!title?.trim()) return;
         const created = await boardsApi.createBoard(title.trim());
         await loadBoards();
         setBoard(created);
-        setViewMode('board');
       }}
       onSearchChange={setSearch}
       onFiltersChange={setFilters}

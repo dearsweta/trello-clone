@@ -29,7 +29,6 @@ export function useWorkspaceDnd({
   setBoard,
   inboxCards,
   setInboxCards,
-  viewMode,
 }) {
   const [activeDrag, setActiveDrag] = useState(null);
   const [draggingBoardCardId, setDraggingBoardCardId] = useState(null);

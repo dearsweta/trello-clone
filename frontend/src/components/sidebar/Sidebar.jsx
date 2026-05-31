@@ -1,60 +1,71 @@
-import { FiLayers, FiPlus } from 'react-icons/fi';
+import { memo } from 'react';
+import { useDroppable } from '@dnd-kit/core';
+import { FiInbox, FiPlus } from 'react-icons/fi';
 import BoardsList from './BoardsList.jsx';
-import SidebarInboxDrop from './SidebarInboxDrop.jsx';
+import InboxSection from '../inbox/InboxSection.jsx';
 
-export default function Sidebar({
+function Sidebar({
   boards,
   activeBoardId,
-  inboxActive,
-  inboxCardCount = 0,
-  inboxDropActive = false,
   onSelectBoard,
-  onSelectInbox,
   onCreateBoard,
+  inboxCards,
+  draggingInboxCardId,
+  inboxDropPreview,
+  inboxDropActive,
+  onInboxUpdate,
+  onOpenInboxCard,
 }) {
+  const { setNodeRef, isOver } = useDroppable({
+    id: 'inbox-drop',
+    data: { type: 'inbox-drop' },
+  });
+
+  const { setNodeRef: setSidebarDropRef, isOver: isSidebarOver } = useDroppable({
+    id: 'sidebar-inbox-drop',
+    data: { type: 'sidebar-inbox-drop' },
+  });
+
+  const isTarget = inboxDropPreview !== null || inboxDropActive || isOver || isSidebarOver;
+
   return (
     <aside
-      className={`flex shrink-0 flex-col border-r border-slate-800 bg-[#1e1f26] text-white transition-[width] ${
-        inboxActive ? 'w-[280px]' : 'w-[240px]'
+      ref={setNodeRef}
+      className={`flex h-full w-[min(100%,304px)] shrink-0 flex-col border-r border-slate-200/90 bg-[#e8edf5] sm:w-[304px] md:w-[320px] ${
+        isTarget ? 'shadow-[inset_0_0_0_2px_rgba(124,58,237,0.45)]' : ''
       }`}
     >
-      <div className="shrink-0 border-b border-white/10 px-3 py-3">
-        <div className="mb-3 flex items-center gap-2 px-1">
-          <FiLayers className="text-violet-400" size={20} />
-          <span className="text-base font-semibold tracking-tight text-white">TaskFlow</span>
+      <div
+        ref={setSidebarDropRef}
+        className="flex shrink-0 items-center justify-between border-b border-slate-200/90 px-3 py-2.5"
+      >
+        <div className="flex items-center gap-2">
+          <FiInbox className="text-slate-600" size={18} />
+          <h2 className="text-[15px] font-semibold text-slate-800">Inbox</h2>
         </div>
+      </div>
+
+      <InboxSection
+        inboxCards={inboxCards}
+        draggingInboxCardId={draggingInboxCardId}
+        inboxDropPreview={inboxDropPreview}
+        onInboxUpdate={onInboxUpdate}
+        onOpenCard={onOpenInboxCard}
+      />
+
+      <div className="shrink-0 border-t border-slate-200/90 bg-[#dfe6f0]/60 px-2 py-2">
         <button
           type="button"
           onClick={onCreateBoard}
-          className="flex w-full items-center justify-center gap-2 rounded-md bg-violet-600/90 px-3 py-2 text-sm font-medium text-white transition hover:bg-violet-600"
+          className="mb-2 flex w-full items-center justify-center gap-1.5 rounded-md border border-slate-300/80 bg-white/80 px-2 py-1.5 text-xs font-medium text-slate-700 transition hover:bg-white hover:text-slate-900"
         >
-          <FiPlus size={15} />
-          Create Board
+          <FiPlus size={14} />
+          Create board
         </button>
-      </div>
-
-      <div className="flex min-h-0 flex-1 flex-col">
-        <div
-          className={`flex min-h-0 flex-col border-b border-white/10 ${
-            inboxActive ? 'flex-[1.4]' : 'shrink-0'
-          }`}
-        >
-          <SidebarInboxDrop
-            active={inboxActive}
-            cardCount={inboxCardCount}
-            dropActive={inboxDropActive}
-            onSelect={onSelectInbox}
-          />
-        </div>
-
-        <div className="flex min-h-0 flex-[0.85] flex-col overflow-hidden px-1 py-2">
-          <BoardsList
-            boards={boards}
-            activeBoardId={inboxActive ? null : activeBoardId}
-            onSelect={onSelectBoard}
-          />
-        </div>
+        <BoardsList boards={boards} activeBoardId={activeBoardId} onSelect={onSelectBoard} />
       </div>
     </aside>
   );
 }
+
+export default memo(Sidebar);

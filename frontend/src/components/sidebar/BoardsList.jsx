@@ -8,12 +8,12 @@ function BoardNavItem({ board, active, onSelect }) {
         onClick={() => onSelect(board.id)}
         className={`group flex w-full items-center gap-2 rounded-md px-2 py-1.5 text-left transition ${
           active
-            ? 'bg-white/10 text-white'
-            : 'text-slate-400 hover:bg-white/5 hover:text-slate-200'
+            ? 'bg-white text-slate-800 shadow-sm ring-1 ring-slate-200/80'
+            : 'text-slate-600 hover:bg-white/70 hover:text-slate-800'
         }`}
       >
         <span
-          className={`h-1.5 w-1.5 shrink-0 rounded-full ${active ? 'ring-2 ring-white/30' : ''}`}
+          className={`h-2 w-2 shrink-0 rounded-full ${active ? 'ring-2 ring-slate-300/80' : ''}`}
           style={{ backgroundColor: board.background }}
         />
         <span className={`truncate text-[13px] leading-tight ${active ? 'font-medium' : 'font-normal'}`}>
@@ -28,11 +28,11 @@ const MemoBoardNavItem = memo(BoardNavItem);
 
 function BoardsList({ boards, activeBoardId, onSelect }) {
   return (
-    <div className="flex min-h-0 flex-1 flex-col">
-      <p className="mb-1.5 px-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+    <div className="flex max-h-[180px] min-h-0 flex-col">
+      <p className="mb-1 px-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">
         Boards
       </p>
-      <ul className="flex flex-1 flex-col gap-0.5 overflow-y-auto pr-1">
+      <ul className="flex flex-col gap-0.5 overflow-y-auto">
         {boards.map((b) => (
           <MemoBoardNavItem
             key={b.id}
