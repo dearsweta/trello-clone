@@ -20,6 +20,22 @@ Supports drag-and-drop task management, multiple boards, global inbox workflow, 
 ---
 
 # Tech Stack
+## Docker Support
+
+Run the complete application locally using Docker:
+
+```bash
+docker compose up --build
+```
+
+Services:
+- Frontend (React + Vite)
+- Backend (Node.js + Express)
+- MySQL Database
+
+Database schema and seed data are initialized automatically on first startup.
+
+
 
 ## Frontend
 - React
@@ -43,6 +59,9 @@ Supports drag-and-drop task management, multiple boards, global inbox workflow, 
 
 # Features
 
+- Dockerized multi-container architecture
+- Automated database initialization
+- Cloud deployment across Vercel, Render, and Railway
 - Multiple Kanban boards
 - Drag-and-drop cards
 - Cross-list movement
