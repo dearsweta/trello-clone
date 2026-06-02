@@ -9,8 +9,7 @@ Supports drag-and-drop task management, multiple boards, global inbox workflow, 
 # Live Demo
 
 - Frontend:  
-  https://trello-clone-6spq6jfgm-itsswetas-projects.vercel.app
-
+  https://trello-clone-9fr3ov2h2-itsswetas-projects.vercel.app
 - Backend API:  
   https://trello-clone-pebf.onrender.com
 
